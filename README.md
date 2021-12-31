@@ -15,11 +15,10 @@ webpack.config => file-loader => options => esModule: false //不转换esModule
 
 webpack.config => cssloader => options => esModule // 防止将css里url转换成require导入方式
 
-/**
-* [ext]: 扩展名
-* [name]: 文件名
-* [hash]: 文件内容
-* [contentHash]: 根据文件内容生成哈希
-* [hash<length>]: 自定义哈希长度
-* [path]: 路径
-* */ 
+
+[ext]: 扩展名
+[name]: 文件名
+[hash]: 文件内容
+[contentHash]: 根据文件内容生成哈希
+[hash<length>]: 自定义哈希长度
+[path]: 路径
