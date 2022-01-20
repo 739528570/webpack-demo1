@@ -22,3 +22,23 @@ webpack.config => cssloader => options => esModule // 防止将css里url转换�
 [contentHash]: 根据文件内容生成哈希
 [hash<length>]: 自定义哈希长度
 [path]: 路径
+
+
+1、url-loader 将图片base64 uri加到文件中，减少请求次数
+2、file-loader 将资源拷贝至指定文件夹，分开请求
+3、url-loader 内部也可以调用file-loader
+4、通过limit临界值，大于limit则拷贝
+
+asset模块
+asset module type
+1.asset/resource -> file-loader
+2.asset/inline -> url-loader
+3.asset/source -> raw-loader
+
+DefinePlugin：html插入变量<%= %>
+
+@bable/preset-env 插件集合，能对绝大多数新语法进行兼容处理
+
+babel-loader 相关的配置文件
+babel.config.js(json cjs mjs)
+babelrc.json(js)

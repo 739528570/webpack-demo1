@@ -1,4 +1,5 @@
 const path = require("path");
+const { DefinePlugin } = require("webpack")
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -11,6 +12,7 @@ module.exports = {
         filename: "app.js",
         path: path.resolve(__dirname, "dist"),
         clean: true,
+        // assetModuleFilename: "img/[name].[hash:6][ext]",
     },
     module: {
         rules: [
@@ -37,22 +39,82 @@ module.exports = {
                     "less-loader"
                 ],
             },
+            // {
+            //     test: /\.(jpe?g|png|gif|svg)$/,
+            //     use: {
+            //         loader: "file-loader",
+            //         options: {
+            //             name: "[name].[hash:6].[ext]"
+            //             /**
+            //              * [ext]: 扩展名
+            //              * [name]: 文件名
+            //              * [hash]: 文件内容
+            //              * [contentHash]: 根据文件内容生成哈希
+            //              * [hash<length>]: 自定义哈希长度
+            //              * [path]: 路径
+            //              * */ 
+            //         }
+            //     }
+            // },
+            // {
+            //     test: /\.(jpe?g|png|gif|svg)$/,
+            //     use: {
+            //         loader: "url-loader",
+            //         options: {
+            //             name: "[name].[hash:6].[ext]",
+            //             limit: 2 * 1024 * 1024,
+            //             /**
+            //              * [ext]: 扩展名
+            //              * [name]: 文件名
+            //              * [hash]: 文件内容
+            //              * [contentHash]: 根据文件内容生成哈希
+            //              * [hash<length>]: 自定义哈希长度
+            //              * [path]: 路径
+            //              * */ 
+            //         }
+            //     }
+            // },
+            // {
+            //     test: /\.(jpe?g|png|gif|svg)$/,
+            //     type: 'asset/resource',
+            //     generator: {
+            //         filename: "img/[name].[hash:6][ext]",
+            //     }
+            // },
+            // {
+            //     test: /\.(jpe?g|png|gif|svg)$/,
+            //     type: 'asset/inline',
+            // },
+            // {
+            //     test: /\.(ttf|woff2?)$/,
+            //     type: 'asset/resource',
+            //     generator: {
+            //         filename: "font/[name].[hash:6][ext]",
+            //     }
+            // },
             {
                 test: /\.(jpe?g|png|gif|svg)$/,
-                use: {
-                    loader: "file-loader",
-                    options: {
-                        name: "[name].[hash:6].[ext]"
-                        /**
-                         * [ext]: 扩展名
-                         * [name]: 文件名
-                         * [hash]: 文件内容
-                         * [contentHash]: 根据文件内容生成哈希
-                         * [hash<length>]: 自定义哈希长度
-                         * [path]: 路径
-                         * */ 
+                type: 'asset',
+                generator: {
+                    filename: "img/[name].[hash:6][ext]",
+                },
+                parser: {
+                    dataUrlCondition: {
+                        maxSize: 2 * 1024 * 1024,
                     }
                 }
+            },
+            {
+                test: /\.js$/,
+                use: ['babel-loader'],
+                // use: [
+                //     {
+                //         loader: "babel-loader",
+                //         options: {
+                //             presets: ['@babel/preset-env']
+                //         }
+                //     }
+                // ]
             }
         ]
     },
@@ -65,8 +127,12 @@ module.exports = {
       },
     plugins: [
         new HtmlWebpackPlugin({
+            title: "测试",
             template: "./src/index.html",
         }),
         new MiniCssExtractPlugin(),
+        new DefinePlugin({
+            BASE_URL: "app",
+        })
     ]
 }
