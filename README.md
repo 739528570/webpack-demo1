@@ -42,3 +42,9 @@ DefinePlugin：html插入变量<%= %>
 babel-loader 相关的配置文件
 babel.config.js(json cjs mjs)
 babelrc.json(js)
+
+webpack4默认启用polyfill，打包体积较大
+webpack5移除了polyfill
+@bable/preset-env并不会对最新语法（如Promise、async await、generator）做兼容
+core-js/stable针对Promise、async await等
+regenerator-runtime/runtime针对generator等
