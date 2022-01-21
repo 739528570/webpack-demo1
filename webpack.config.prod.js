@@ -1,5 +1,6 @@
 const path = require("path");
 const { DefinePlugin } = require("webpack")
+const CopyPlugin = require("copy-webpack-plugin")
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -106,6 +107,7 @@ module.exports = {
             },
             {
                 test: /\.js$/,
+                exclude: /node_modules/, //防止与自己代码的polyfill填充冲突
                 use: ['babel-loader'],
                 // use: [
                 //     {
@@ -129,6 +131,16 @@ module.exports = {
         new HtmlWebpackPlugin({
             title: "测试",
             template: "./src/index.html",
+        }),
+        new CopyPlugin({
+            patterns: [
+                { 
+                    from: 'public',
+                    globOptions: {
+                        ignore: ['**/index.html'], //防止重复打包html模板
+                    }
+                }
+            ]
         }),
         new MiniCssExtractPlugin(),
         new DefinePlugin({
