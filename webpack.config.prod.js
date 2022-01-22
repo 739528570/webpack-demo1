@@ -130,7 +130,7 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             title: "测试",
-            template: "./src/index.html",
+            template: "./public/index.html",
         }),
         new CopyPlugin({
             patterns: [

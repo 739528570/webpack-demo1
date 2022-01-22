@@ -48,3 +48,41 @@ webpack5移除了polyfill
 @bable/preset-env并不会对最新语法（如Promise、async await、generator）做兼容
 core-js/stable针对Promise、async await等
 regenerator-runtime/runtime针对generator等
+
+开发模式
+wacth + live server
+不足
+1.所有源代码都会重新编译
+2.每次编译成功后都需要进行文件重新读写
+3.依赖vscode
+4.不能实现局部刷新
+
+webpack-dev-server
+webpack4之前: webpack-dev
+webpack5: webpack serve
+
+HMR功能
+target: 'web', 屏蔽browserslistrc
+需要热更新的模块
+if (module.hot) {
+    module.hot.accept(['./title.js'], () => {
+        ...
+    })
+}
+
+react热更新
+@pmmmwh/react-refresh-webpack-plugin
+react-refresh
+
+output
+- publicPath: index.html内部的引用路径，域名 + publicPath + filename
+
+devServer
+- publicPath：指定本地服务打包的位置
+- contentBase: 如打包后的资源依赖于其他资源，则需要指定路径（已移除）
+- watchContentBase: true; 与contentBase配套使用，监听资源变化（已移除）
+- hotOnly: true; 某个模块报错不会影响整个页面（已移除，用hot：only代替）
+- post: 端口
+- open：更新自动打开浏览器
+- compress：压缩，提升性能
+- historyApoFallback: true | { 自定义 }; 访问服务路由404错误时，被替代为index.html
