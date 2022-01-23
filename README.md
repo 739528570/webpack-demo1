@@ -86,3 +86,22 @@ devServer
 - open：更新自动打开浏览器
 - compress：压缩，提升性能
 - historyApoFallback: true | { 自定义 }; 访问服务路由404错误时，被替代为index.html
+
+resolve 导入路径及拓展名补全
+- extensions: 补全拓展名
+- alias：自定义绝对路径
+
+mode
+development	会将 DefinePlugin 中 process.env.NODE_ENV 的值设置为 development. 为模块和 chunk 启用有效的名。
+production	会将 DefinePlugin 中 process.env.NODE_ENV 的值设置为 production. 为模块和 chunk 启用确定性的混淆名称，FlagDependencyUsagePlugin，FlagIncludedChunksPlugin，ModuleConcatenationPlugin，NoEmitOnErrorsPlugin 和 TerserPlugin 。
+
+devtool
+eval-source-map：每个模块使用 eval() 执行，并且 source map 转换为 DataUrl 后添加到 eval() 中。初始化 source map 时比较慢，但是会在重新构建时提供比较快的速度，并且生成实际的文件。行数能够正确映射，因为会映射到原始代码中。它会生成用于开发环境的最佳品质的 source map。
+
+inline-source-map：source map 转换为 DataUrl 后添加到 bundle 中。
+
+cheap-source-map：没有列映射(column mapping)的 source map，忽略 loader source map。
+
+cheap-module-source-map：没有列映射(column mapping)的 source map，将 loader source map 简化为每行一个映射(mapping)。
+
+ts-loader：语法转换

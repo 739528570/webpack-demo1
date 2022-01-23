@@ -1,22 +1,26 @@
 const path = require("path");
-const { DefinePlugin } = require("webpack")
-const CopyPlugin = require("copy-webpack-plugin")
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const ReactRefreshPlugin = require("@pmmmwh/react-refresh-webpack-plugin")
+const { merge } = require("webpack-merge")
 
-module.exports = {
-    mode: "development",
+const prodConfig = require("./webpack.prod")
+const devConfig = require("./webpack.dev")
+
+const commonConfig = {
     entry: "./src/index.js",
-    devServer: {
-        hot: true,
+    context: path.resolve(__dirname, '../'), // 主路径
+    resolve: {
+        extensions: ['.tsx', '.ts', '.jsx', '.js', '.less'],
+        alias: {
+            "@src": path.resolve(__dirname, "../src")
+        }
     },
-    target: 'web', //屏蔽browserslistrc
+    target: "web", //屏蔽browserslistrc
     output: {
         filename: "app.js",
-        path: path.resolve(__dirname, "dist"),
-        clean: true,
+        path: path.resolve(__dirname, "../dist"),
+        // clean: true,
         // assetModuleFilename: "img/[name].[hash:6][ext]",
     },
     module: {
@@ -81,47 +85,51 @@ module.exports = {
             // },
             // {
             //     test: /\.(jpe?g|png|gif|svg)$/,
-            //     type: 'asset/resource',
+            //     type: "asset/resource",
             //     generator: {
             //         filename: "img/[name].[hash:6][ext]",
             //     }
             // },
             // {
             //     test: /\.(jpe?g|png|gif|svg)$/,
-            //     type: 'asset/inline',
+            //     type: "asset/inline",
             // },
             // {
             //     test: /\.(ttf|woff2?)$/,
-            //     type: 'asset/resource',
+            //     type: "asset/resource",
             //     generator: {
             //         filename: "font/[name].[hash:6][ext]",
             //     }
             // },
             {
                 test: /\.(jpe?g|png|gif|svg)$/,
-                type: 'asset',
+                type: "asset",
                 generator: {
                     filename: "img/[name].[hash:6][ext]",
                 },
                 parser: {
                     dataUrlCondition: {
-                        maxSize: 2 * 1024 * 1024,
+                        maxSize: 2 * 1024 * 1024, //规定文件超出上限时不采用base64
                     }
                 }
             },
             {
-                test: /\.(js|jsx)?$/,
-                exclude: /node_modules/, //防止与自己代码的polyfill填充冲突
-                use: ['babel-loader'],
+                test: /\.(jsx|tsx|ts|js)?$/,
+                exclude: /node_modules/, //防止第三方库与自己代码的polyfill填充冲突
+                use: ["babel-loader"],
                 // use: [
                 //     {
                 //         loader: "babel-loader",
                 //         options: {
-                //             presets: ['@babel/preset-env']
+                //             presets: ["@babel/preset-env"]
                 //         }
                 //     }
                 // ]
-            }
+            },
+            // {
+            //     test: /\.ts$/,
+            //     use: ["ts-loader"]
+            // }
         ]
     },
     optimization: {
@@ -130,26 +138,23 @@ module.exports = {
           // `...`,
           new CssMinimizerPlugin(),
         ],
-      },
+    },
     plugins: [
         new HtmlWebpackPlugin({
             title: "测试",
             template: "./public/index.html",
         }),
-        new CopyPlugin({
-            patterns: [
-                { 
-                    from: 'public',
-                    globOptions: {
-                        ignore: ['**/index.html'], //防止重复打包html模板
-                    }
-                }
-            ]
-        }),
         new MiniCssExtractPlugin(),
-        new DefinePlugin({
-            BASE_URL: "app",
-        }),
-        new ReactRefreshPlugin()
     ]
+}
+
+module.exports = (env) => {
+    console.log(env, "---------------------------------")
+    const isProduction = env.production
+
+    const config = isProduction ? prodConfig : devConfig
+
+    const mergeConfig = merge(commonConfig, config)
+
+    return mergeConfig
 }
