@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm run ck && webpack --config ./webpack/webpack.common.js --env production",
-    "dev": "npm run ck && webpack serve --config ./webpack/webpack.common.js --en development",
+    "dev": "npm run ck && webpack serve --config ./webpack/webpack.common.js --env development",
     "ck": "tsc --noEmit"
   },
   "keywords": [],
